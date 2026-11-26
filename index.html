@@ -191,7 +191,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       padding: 6px 10px;
       background: #18181c;
       border-bottom: 1px solid var(--border);
@@ -208,7 +208,13 @@
       min-width: 0;
     }
 
-    .pane-ext-btn {
+    .pane-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .pane-btn {
       padding: 4px 8px;
       border-radius: 6px;
       border: 1px solid var(--border);
@@ -217,6 +223,11 @@
       font-size: 11px;
       cursor: pointer;
       flex-shrink: 0;
+    }
+
+    .pane-btn.active {
+      border-color: var(--accent);
+      background: rgba(94, 106, 210, 0.3);
     }
 
     iframe {
@@ -295,7 +306,10 @@
     <div class="pane" id="pane1">
       <div class="pane-bar">
         <span class="pane-url" id="label1"></span>
-        <button class="pane-ext-btn" id="ext1">Open</button>
+        <div class="pane-actions">
+          <button class="pane-btn" id="proxy1">Proxy</button>
+          <button class="pane-btn" id="ext1">Open</button>
+        </div>
       </div>
       <iframe id="frame1" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
     </div>
@@ -303,7 +317,10 @@
     <div class="pane hidden" id="pane2">
       <div class="pane-bar">
         <span class="pane-url" id="label2"></span>
-        <button class="pane-ext-btn" id="ext2">Open</button>
+        <div class="pane-actions">
+          <button class="pane-btn" id="proxy2">Proxy</button>
+          <button class="pane-btn" id="ext2">Open</button>
+        </div>
       </div>
       <iframe id="frame2" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
     </div>
@@ -323,6 +340,8 @@
       pane2: document.getElementById('pane2'),
       label1: document.getElementById('label1'),
       label2: document.getElementById('label2'),
+      proxy1: document.getElementById('proxy1'),
+      proxy2: document.getElementById('proxy2'),
       ext1: document.getElementById('ext1'),
       ext2: document.getElementById('ext2'),
       frame1: document.getElementById('frame1'),
@@ -349,8 +368,10 @@
 
       const raw1 = engine.getRawUrl(1);
       const raw2 = engine.getRawUrl(2);
-      el.label1.textContent = raw1;
-      el.label2.textContent = raw2;
+      el.label1.textContent = state.pane1Proxy ? `[Proxy] ${raw1}` : raw1;
+      el.label2.textContent = state.pane2Proxy ? `[Proxy] ${raw2}` : raw2;
+      el.proxy1.classList.toggle('active', state.pane1Proxy);
+      el.proxy2.classList.toggle('active', state.pane2Proxy);
 
       if (el.frame1.src !== state.pane1Url) el.frame1.src = state.pane1Url;
       if (el.frame2.src !== state.pane2Url) el.frame2.src = state.pane2Url;
@@ -371,6 +392,8 @@
     document.getElementById('splitBtn').onclick = () => engine.toggleSplit();
     document.getElementById('pinBtn').onclick = () => engine.pinCurrent();
     document.getElementById('immerseBtn').onclick = () => engine.toggleSidebar(false);
+    el.proxy1.onclick = () => engine.togglePaneProxy(1);
+    el.proxy2.onclick = () => engine.togglePaneProxy(2);
     el.ext1.onclick = () => window.open(engine.getRawUrl(1), '_blank', 'noopener,noreferrer');
     el.ext2.onclick = () => window.open(engine.getRawUrl(2), '_blank', 'noopener,noreferrer');
 
