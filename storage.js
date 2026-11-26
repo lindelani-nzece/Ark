@@ -1,6 +1,5 @@
 export const BridgeStorage = {
   async get(key, fallback = null) {
-    // Bridge hook: If running inside a native Swift WKWebView wrapper later, delegate to native bridge
     if (window.webkit?.messageHandlers?.bridgeStorage) {
       return new Promise((resolve) => {
         window.__bridgeResolve = resolve;

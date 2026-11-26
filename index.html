@@ -15,84 +15,267 @@
       --border: rgba(255, 255, 255, 0.12);
       --accent: #5e6ad2;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body, html {
-      width: 100vw; height: 100dvh; background: var(--bg); color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif; overflow: hidden;
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100dvh;
+      background: var(--bg);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow: hidden;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
     /* Floating Pill Trigger */
     .arc-pill {
-      position: fixed; bottom: calc(16px + env(safe-area-inset-bottom)); left: 16px;
-      width: 46px; height: 46px; border-radius: 23px; background: var(--glass);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border); color: #fff; font-size: 18px;
-      display: flex; align-items: center; justify-content: center; z-index: 1000;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      position: fixed;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      left: calc(16px + env(safe-area-inset-left));
+      width: 46px;
+      height: 46px;
+      border-radius: 23px;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      color: #fff;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     }
 
     /* Translucent Floating Sidebar */
     .sidebar {
-      position: fixed; top: calc(14px + env(safe-area-inset-top)); left: 14px;
-      bottom: calc(74px + env(safe-area-inset-bottom)); width: 280px;
-      background: var(--glass); backdrop-filter: blur(26px); -webkit-backdrop-filter: blur(26px);
-      border: 1px solid var(--border); border-radius: 18px; padding: 14px;
-      display: flex; flex-direction: column; gap: 10px; z-index: 950;
+      position: fixed;
+      top: calc(14px + env(safe-area-inset-top));
+      left: calc(14px + env(safe-area-inset-left));
+      bottom: calc(74px + env(safe-area-inset-bottom));
+      width: min(280px, calc(100vw - 28px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+      max-height: calc(100dvh - 88px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      background: var(--glass);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 950;
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;
-      box-shadow: 0 24px 48px rgba(0,0,0,0.55);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.55);
     }
-    .sidebar.hidden { transform: translateX(-320px); opacity: 0; pointer-events: none; }
 
-    .pane-tabs { display: flex; gap: 6px; }
-    .pane-tab {
-      flex: 1; padding: 7px; border-radius: 8px; font-size: 12px; text-align: center;
-      background: rgba(255,255,255,0.06); border: 1px solid transparent; color: #aaa;
+    .sidebar.hidden {
+      transform: translateX(-120%);
+      opacity: 0;
+      pointer-events: none;
     }
-    .pane-tab.active { border-color: var(--accent); color: #fff; background: rgba(94,106,210,0.22); }
+
+    .pane-tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .pane-tab {
+      flex: 1;
+      padding: 7px;
+      border-radius: 8px;
+      font-size: 12px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid transparent;
+      color: #aaa;
+      cursor: pointer;
+    }
+
+    .pane-tab.active {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(94, 106, 210, 0.22);
+    }
 
     .url-bar {
-      width: 100%; padding: 11px 12px; border-radius: 11px; border: 1px solid var(--border);
-      background: rgba(0,0,0,0.45); color: #fff; font-size: 16px; outline: none;
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      font-size: 16px;
+      outline: none;
     }
-    .url-bar:focus { border-color: var(--accent); }
 
-    .btn-row { display: flex; gap: 6px; }
+    .url-bar:focus {
+      border-color: var(--accent);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 6px;
+    }
+
     .btn {
-      flex: 1; padding: 9px; border-radius: 9px; border: 1px solid var(--border);
-      background: rgba(255,255,255,0.08); color: #fff; font-size: 13px; font-weight: 500;
+      flex: 1;
+      padding: 9px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
     }
 
     .pinned-list {
-      display: flex; flex-direction: column; gap: 6px; overflow-y: auto; margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+      margin-top: 6px;
+      min-height: 0;
     }
+
     .pinned-item {
-      padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.05);
-      font-size: 13px; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 13px;
+      color: #eee;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
     }
 
     /* Edge-to-Edge Split Workspace */
-    .workspace { display: flex; width: 100%; height: 100%; padding: 6px; gap: 4px; }
-    .pane {
-      flex: 1; height: 100%; border-radius: 14px; overflow: hidden;
-      background: #fff; border: 1px solid var(--border);
+    .workspace {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      padding: 6px;
+      gap: 4px;
+      min-width: 0;
+      min-height: 0;
     }
-    .pane.hidden { display: none; }
-    iframe { width: 100%; height: 100%; border: none; }
+
+    .pane {
+      position: relative;
+      flex: 1 1 0;
+      min-width: 0;
+      min-height: 0;
+      height: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pane.hidden {
+      display: none;
+    }
+
+    .pane-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 10px;
+      background: #18181c;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: #ccc;
+      flex-shrink: 0;
+    }
+
+    .pane-url {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .pane-ext-btn {
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: 11px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    iframe {
+      width: 100%;
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+      border: none;
+      background: #fff;
+    }
 
     .divider {
-      width: 16px; display: flex; align-items: center; justify-content: center;
-      touch-action: none; cursor: col-resize;
+      width: 16px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: none;
+      cursor: col-resize;
     }
+
     .divider::after {
-      content: ""; width: 4px; height: 48px; border-radius: 2px; background: rgba(255,255,255,0.28);
+      content: "";
+      width: 4px;
+      height: 48px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.28);
     }
-    .divider.hidden { display: none; }
+
+    .divider.hidden {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .workspace {
+        flex-direction: column;
+      }
+
+      .pane {
+        width: 100%;
+        height: auto;
+      }
+
+      .divider {
+        width: 100%;
+        height: 16px;
+        cursor: row-resize;
+      }
+
+      .divider::after {
+        width: 48px;
+        height: 4px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <button class="arc-pill" id="pillBtn">☰</button>
+  <button class="arc-pill" id="pillBtn" aria-label="Toggle sidebar">☰</button>
 
   <aside class="sidebar" id="sidebar">
     <div class="pane-tabs">
@@ -108,12 +291,20 @@
     <div class="pinned-list" id="pinnedList"></div>
   </aside>
 
-  <main class="workspace">
+  <main class="workspace" id="workspace">
     <div class="pane" id="pane1">
+      <div class="pane-bar">
+        <span class="pane-url" id="label1"></span>
+        <button class="pane-ext-btn" id="ext1">Open</button>
+      </div>
       <iframe id="frame1" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
     </div>
     <div class="divider hidden" id="divider"></div>
     <div class="pane hidden" id="pane2">
+      <div class="pane-bar">
+        <span class="pane-url" id="label2"></span>
+        <button class="pane-ext-btn" id="ext2">Open</button>
+      </div>
       <iframe id="frame2" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
     </div>
   </main>
@@ -122,6 +313,7 @@
     import { ArcBridgeEngine } from './logic.js';
 
     const el = {
+      workspace: document.getElementById('workspace'),
       sidebar: document.getElementById('sidebar'),
       pillBtn: document.getElementById('pillBtn'),
       urlInput: document.getElementById('urlInput'),
@@ -129,11 +321,17 @@
       tab2: document.getElementById('tab2'),
       pane1: document.getElementById('pane1'),
       pane2: document.getElementById('pane2'),
+      label1: document.getElementById('label1'),
+      label2: document.getElementById('label2'),
+      ext1: document.getElementById('ext1'),
+      ext2: document.getElementById('ext2'),
       frame1: document.getElementById('frame1'),
       frame2: document.getElementById('frame2'),
       divider: document.getElementById('divider'),
       pinnedList: document.getElementById('pinnedList')
     };
+
+    const isStacked = () => window.matchMedia('(max-width: 640px)').matches;
 
     const engine = new ArcBridgeEngine((state) => {
       el.sidebar.classList.toggle('hidden', !state.sidebarOpen);
@@ -144,10 +342,15 @@
 
       if (state.isSplit) {
         el.pane1.style.flex = `0 0 ${state.splitRatio}%`;
-        el.pane2.style.flex = '1';
+        el.pane2.style.flex = '1 1 0';
       } else {
-        el.pane1.style.flex = '1';
+        el.pane1.style.flex = '1 1 0';
       }
+
+      const raw1 = engine.getRawUrl(1);
+      const raw2 = engine.getRawUrl(2);
+      el.label1.textContent = raw1;
+      el.label2.textContent = raw2;
 
       if (el.frame1.src !== state.pane1Url) el.frame1.src = state.pane1Url;
       if (el.frame2.src !== state.pane2Url) el.frame2.src = state.pane2Url;
@@ -162,13 +365,14 @@
       });
     });
 
-    // Bind UI Controls
     el.pillBtn.onclick = () => engine.toggleSidebar();
     el.tab1.onclick = () => engine.setActivePane(1);
     el.tab2.onclick = () => engine.setActivePane(2);
     document.getElementById('splitBtn').onclick = () => engine.toggleSplit();
     document.getElementById('pinBtn').onclick = () => engine.pinCurrent();
     document.getElementById('immerseBtn').onclick = () => engine.toggleSidebar(false);
+    el.ext1.onclick = () => window.open(engine.getRawUrl(1), '_blank', 'noopener,noreferrer');
+    el.ext2.onclick = () => window.open(engine.getRawUrl(2), '_blank', 'noopener,noreferrer');
 
     el.urlInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
@@ -178,7 +382,6 @@
       }
     });
 
-    // Touch Split Divider
     let dragging = false;
     el.divider.addEventListener('pointerdown', (e) => {
       dragging = true;
@@ -186,17 +389,22 @@
       el.pane1.style.pointerEvents = 'none';
       el.pane2.style.pointerEvents = 'none';
     });
+
     el.divider.addEventListener('pointermove', (e) => {
       if (!dragging) return;
-      engine.setSplitRatio((e.clientX / window.innerWidth) * 100);
+      const rect = el.workspace.getBoundingClientRect();
+      const ratio = isStacked()
+        ? ((e.clientY - rect.top) / Math.max(rect.height, 1)) * 100
+        : ((e.clientX - rect.left) / Math.max(rect.width, 1)) * 100;
+      engine.setSplitRatio(ratio);
     });
+
     el.divider.addEventListener('pointerup', () => {
       dragging = false;
       el.pane1.style.pointerEvents = 'auto';
       el.pane2.style.pointerEvents = 'auto';
     });
 
-    // Register Offline Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js');
     }
