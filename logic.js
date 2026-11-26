@@ -11,6 +11,8 @@ export class ArcBridgeEngine {
       activePane: 1,
       pane1RawUrl: 'https://example.com',
       pane2RawUrl: 'https://en.wikipedia.org/wiki/Main_Page',
+      pane1Proxy: false,
+      pane2Proxy: false,
       pane1Url: 'https://example.com',
       pane2Url: 'https://en.wikipedia.org/wiki/Main_Page',
       pinnedSpaces: [
@@ -25,9 +27,13 @@ export class ArcBridgeEngine {
     if (saved) {
       this.state = { ...this.state, ...saved };
     }
-    this.state.pane1Url = this.applyProxy(this.state.pane1RawUrl);
-    this.state.pane2Url = this.applyProxy(this.state.pane2RawUrl);
+    this.syncUrls();
     this.emit();
+  }
+
+  syncUrls() {
+    this.state.pane1Url = this.resolvePaneUrl(this.state.pane1RawUrl, this.state.pane1Proxy);
+    this.state.pane2Url = this.resolvePaneUrl(this.state.pane2RawUrl, this.state.pane2Proxy);
   }
 
   emit() {
@@ -39,7 +45,7 @@ export class ArcBridgeEngine {
     const trimmed = rawInput.trim();
     if (!trimmed) return null;
     if (!trimmed.includes('.') || trimmed.includes(' ')) {
-      return `https://www.google.com/search?q=${encodeURIComponent(trimmed)}`;
+      return `https://www.bing.com/search?q=${encodeURIComponent(trimmed)}`;
     }
     if (!/^https?:\/\//i.test(trimmed)) {
       return `https://${trimmed}`;
@@ -47,8 +53,8 @@ export class ArcBridgeEngine {
     return trimmed;
   }
 
-  applyProxy(rawUrl) {
-    if (!this.proxyPrefix) return rawUrl;
+  resolvePaneUrl(rawUrl, useProxy) {
+    if (!useProxy || !this.proxyPrefix) return rawUrl;
     return `${this.proxyPrefix}${encodeURIComponent(rawUrl)}`;
   }
 
@@ -56,18 +62,30 @@ export class ArcBridgeEngine {
     return paneNum === 1 ? this.state.pane1RawUrl : this.state.pane2RawUrl;
   }
 
+  isPaneProxied(paneNum) {
+    return paneNum === 1 ? this.state.pane1Proxy : this.state.pane2Proxy;
+  }
+
+  togglePaneProxy(paneNum) {
+    if (paneNum === 1) {
+      this.state.pane1Proxy = !this.state.pane1Proxy;
+    } else {
+      this.state.pane2Proxy = !this.state.pane2Proxy;
+    }
+    this.syncUrls();
+    this.emit();
+  }
+
   navigate(rawInput) {
     const cleanUrl = this.normalizeTargetUrl(rawInput);
     if (!cleanUrl) return;
-    const framedUrl = this.applyProxy(cleanUrl);
 
     if (this.state.activePane === 1) {
       this.state.pane1RawUrl = cleanUrl;
-      this.state.pane1Url = framedUrl;
     } else {
       this.state.pane2RawUrl = cleanUrl;
-      this.state.pane2Url = framedUrl;
     }
+    this.syncUrls();
     this.state.sidebarOpen = false;
     this.emit();
   }
