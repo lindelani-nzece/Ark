@@ -3,7 +3,7 @@ import { BridgeStorage } from './storage.js';
 export class ArcBridgeEngine {
   constructor(onStateChange) {
     this.onStateChange = onStateChange;
-    this.proxyPrefix = ''; // Example: 'https://YOUR-WORKER.workers.dev/?url='
+    this.proxyPrefix = 'https://red-salad-2b1a.domain-709.workers.dev/?url=';
     this.state = {
       isSplit: false,
       splitRatio: 50,
@@ -24,9 +24,9 @@ export class ArcBridgeEngine {
     const saved = await BridgeStorage.get('browser_state');
     if (saved) {
       this.state = { ...this.state, ...saved };
-      this.state.pane1Url = this.applyProxy(this.state.pane1RawUrl);
-      this.state.pane2Url = this.applyProxy(this.state.pane2RawUrl);
     }
+    this.state.pane1Url = this.applyProxy(this.state.pane1RawUrl);
+    this.state.pane2Url = this.applyProxy(this.state.pane2RawUrl);
     this.emit();
   }
 
