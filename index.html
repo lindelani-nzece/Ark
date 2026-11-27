@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="ArcBridge" />
   <title>ArcBridge PWA</title>
   <link rel="manifest" href="manifest.json" />
@@ -25,7 +24,7 @@
 
     html, body {
       width: 100%;
-      height: 100dvh;
+      height: 100vh;
       background: var(--bg);
       color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -33,7 +32,6 @@
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
-    /* Floating Pill Trigger */
     .arc-pill {
       position: fixed;
       bottom: calc(16px + env(safe-area-inset-bottom));
@@ -54,14 +52,13 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     }
 
-    /* Translucent Floating Sidebar */
     .sidebar {
       position: fixed;
       top: calc(14px + env(safe-area-inset-top));
       left: calc(14px + env(safe-area-inset-left));
       bottom: calc(74px + env(safe-area-inset-bottom));
       width: min(280px, calc(100vw - 28px - env(safe-area-inset-left) - env(safe-area-inset-right)));
-      max-height: calc(100dvh - 88px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      max-height: calc(100vh - 88px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
       background: var(--glass);
       backdrop-filter: blur(26px);
       -webkit-backdrop-filter: blur(26px);
@@ -158,7 +155,6 @@
       cursor: pointer;
     }
 
-    /* Edge-to-Edge Split Workspace */
     .workspace {
       display: flex;
       width: 100%;
